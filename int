@@ -1,0 +1,40 @@
+1. Open github.com and sign in.
+2. Open a repository you can access (create one if needed).
+3. Click Code → Codespaces → Create codespace on main (or choose the default branch).
+4. Wait for the browser-based VS Code environment to load. This is VM1.
+Step 2 — Create VM2
+Return to the repository and create a second, independent Codespace using the same menu. Wait until it loads.
+Keep both Codespaces available.
+Step 3 — Open PowerShell and check GitHub CLI
+On Windows, press Start, search for PowerShell, and open it. Run:
+gh --version
+Step 4 — Sign in to GitHub CLI
+Check authentication first:
+gh auth status
+If you are not logged in, run the command below and follow the sign-in prompts:
+gh auth login
+Step 5 — Find your Codespace names
+Run this in your computer's PowerShell (not inside a Codespace):
+gh codespace list
+Write down the actual names of VM1 and VM2. The names below are placeholders; do not type them literally.
+Step 6 — Connect to VM1 and create the test file
+Replace YOUR_VM1_NAME with the actual first Codespace name. Run:
+gh codespace ssh -c YOUR_VM1_NAME
+Inside VM1, run:
+echo "This is a text file from Codespace1 to Codespace2" > ~/testfile.txt
+Then return to your local PowerShell:
+exit Experiment 6 • Page 2
+Step 7 — Download the file from VM1 to your computer
+Run this in local PowerShell. Replace YOUR_VM1_NAME with the actual name:
+gh codespace cp -c YOUR_VM1_NAME 'remote:testfile.txt' ./testfile.txt
+If successful, the command may finish without displaying a message.
+Step 8 — Upload the file from your computer to VM2
+Replace YOUR_VM2_NAME with the actual second Codespace name:
+gh codespace cp -c YOUR_VM2_NAME ./testfile.txt 'remote:testfile.txt'
+Step 9 — Verify the file inside VM2
+Connect to VM2:
+gh codespace ssh -c YOUR_VM2_NAME
+Inside VM2, run these commands one at a time:
+ls
+cat ~/testfile.txt
+Expected output: This is a text file from Codespace1 to Codespace2
